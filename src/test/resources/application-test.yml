@@ -1,3 +1,5 @@
 external:
   cnb:
     url: awesome url
+  currency-api:
+    url: awesome url

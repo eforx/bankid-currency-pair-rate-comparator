@@ -41,7 +41,9 @@ class DefaultCnbCurrencyApi(
             .retrieve()
             .body(CnbCurrencyDailyExchangeRateResponse::class.java)
             ?.also {
-                logger.debug("Currency daily exchange rates have been fetched from CNB. {}", it)
+                if (logger.isDebugEnabled) {
+                    logger.debug("Currency daily exchange rates have been fetched from CNB. {}", it)
+                }
             }
             ?: throw CnbCurrencyApiException("Currency daily exchange rate body is null")
     }
