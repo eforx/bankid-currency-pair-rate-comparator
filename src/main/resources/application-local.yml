@@ -4,6 +4,12 @@ external:
   currency-api:
     url: https://cdn.jsdelivr.net
 
+spring:
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=100,expireAfterWrite=15m
+
 logbook:
   format:
     style: http

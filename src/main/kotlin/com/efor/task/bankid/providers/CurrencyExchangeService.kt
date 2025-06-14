@@ -1,6 +1,7 @@
 package com.efor.task.bankid.providers
 
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
@@ -60,6 +61,7 @@ class DefaultCurrencyExchangeService(
         private val logger = LoggerFactory.getLogger(DefaultCurrencyExchangeService::class.java)
     }
 
+    @Cacheable("getCurrencyPairs")
     override fun getCurrencyPairs(
         providerA: CurrencyExchangeProviderId,
         providerB: CurrencyExchangeProviderId,
@@ -101,6 +103,7 @@ class DefaultCurrencyExchangeService(
         return result
     }
 
+    @Cacheable("calculateCurrencyExchangeRateDiff")
     override fun calculateCurrencyExchangeRateDiff(
         sourceProvider: CurrencyExchangeProviderId,
         destProvider: CurrencyExchangeProviderId,
