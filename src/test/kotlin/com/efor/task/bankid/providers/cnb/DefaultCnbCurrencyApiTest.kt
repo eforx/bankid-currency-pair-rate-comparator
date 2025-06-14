@@ -1,7 +1,10 @@
 package com.efor.task.bankid.providers.cnb
 
+import com.efor.task.bankid.providers.cnb.api.CnbCurrencyApi
+import com.efor.task.bankid.providers.cnb.api.Row
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -36,6 +39,10 @@ class DefaultCnbCurrencyApiTest(
                 ),
         )
 
-        cnbCurrencyApi.fetchDailyExchangeRate()
+        val response = cnbCurrencyApi.fetchDailyExchangeRate()
+
+        assertThat(response.table.rows)
+            .hasSize(31)
+            .contains(Row("USD", "dolar", 1, "21.667000".toBigDecimal(), "USA"))
     }
 }

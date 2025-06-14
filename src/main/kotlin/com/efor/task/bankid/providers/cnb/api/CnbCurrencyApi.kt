@@ -1,4 +1,4 @@
-package com.efor.task.bankid.providers.cnb
+package com.efor.task.bankid.providers.cnb.api
 
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component

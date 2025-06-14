@@ -1,4 +1,4 @@
-package com.efor.task.bankid.providers.currencyrate
+package com.efor.task.bankid.providers.currencyapi.api
 
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -7,8 +7,7 @@ import org.springframework.web.client.RestClient
 /**
  * Provides an API to fetch currencies and their exchange rates from an external Currency API.
  */
-interface CurrencyRateApi {
-
+interface CurrencyApi {
     /**
      * Fetches a list of all available currencies from the external Currency API.
      *
@@ -28,13 +27,12 @@ interface CurrencyRateApi {
     fun fetchCurrencyRates(currency: String): CurrencyRatesResponse
 }
 
-
 @Component
-class DefaultCurrencyRateApi(
+class DefaultCurrencyApi(
     private val currencyApiRestClient: RestClient,
-) : CurrencyRateApi {
+) : CurrencyApi {
     companion object {
-        private val logger = LoggerFactory.getLogger(DefaultCurrencyRateApi::class.java)
+        private val logger = LoggerFactory.getLogger(DefaultCurrencyApi::class.java)
         private const val CURRENCY_LIST_ENDPOINT =
             "/npm/@fawazahmed0/currency-api@latest/v1/currencies.json"
         private const val CURRENCY_RATES_ENDPOINT =
@@ -58,7 +56,7 @@ class DefaultCurrencyRateApi(
     }
 
     override fun fetchCurrencyRates(currency: String): CurrencyRatesResponse {
-        logger.info("Fetching currency rates from Currency API ...")
+        logger.info("Fetching currency rates from Currency API ... currency='{}'", currency)
 
         val uriVariables = mapOf("currency" to currency.lowercase())
 
@@ -69,7 +67,11 @@ class DefaultCurrencyRateApi(
             .body(CurrencyRatesResponse::class.java)
             ?.also {
                 if (logger.isDebugEnabled) {
-                    logger.debug("Currency rates have been fetched from Currency API. {}", it)
+                    logger.debug(
+                        "Currency rates have been fetched from Currency API. currency='{}', rates={}",
+                        currency,
+                        it.rates
+                    )
                 }
             }
             ?: throw CurrencyRateApiException("Currency list body is null")

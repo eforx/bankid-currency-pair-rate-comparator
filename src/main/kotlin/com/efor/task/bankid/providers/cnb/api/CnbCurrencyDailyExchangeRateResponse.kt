@@ -1,5 +1,7 @@
-package com.efor.task.bankid.providers.cnb
+package com.efor.task.bankid.providers.cnb.api
 
+import com.efor.task.bankid.providers.currencyRateMathContext
+import com.efor.task.bankid.providers.normalizeCurrencyRate
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
@@ -10,50 +12,50 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import java.io.IOException
 import java.math.BigDecimal
 
-typealias CnbCurrencyDailyExchangeRateResponse = Kurzy
+typealias CnbCurrencyDailyExchangeRateResponse = ExchangeRates
 
 @JacksonXmlRootElement(localName = "kurzy")
-data class Kurzy(
+data class ExchangeRates(
     @JacksonXmlProperty(isAttribute = true, localName = "banka")
-    val banka: String,
+    val bank: String,
     @JacksonXmlProperty(isAttribute = true, localName = "datum")
-    val datum: String,
+    val date: String,
     @JacksonXmlProperty(isAttribute = true, localName = "poradi")
-    val poradi: Int,
+    val order: Int,
     @JacksonXmlProperty(localName = "tabulka")
-    val tabulka: Tabulka,
+    val table: Table,
 )
 
-data class Tabulka(
+data class Table(
     @JacksonXmlProperty(isAttribute = true, localName = "typ")
-    val typ: String,
+    val type: String,
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "radek")
-    val radky: List<Radek> = emptyList(),
+    val rows: List<Row> = emptyList(),
 )
 
-data class Radek(
+data class Row(
     @JacksonXmlProperty(isAttribute = true, localName = "kod")
-    val kod: String,
+    val code: String,
     @JacksonXmlProperty(isAttribute = true, localName = "mena")
-    val mena: String,
+    val currency: String,
     @JacksonXmlProperty(isAttribute = true, localName = "mnozstvi")
-    val mnozstvi: Int,
+    val amount: Int,
     @JacksonXmlProperty(isAttribute = true, localName = "kurz")
     @JsonDeserialize(using = CnbBigDecimalDeserializer::class)
-    val kurz: BigDecimal,
+    val rate: BigDecimal,
     @JacksonXmlProperty(isAttribute = true, localName = "zeme")
-    val zeme: String,
+    val country: String,
 )
 
 class CnbBigDecimalDeserializer : JsonDeserializer<BigDecimal?>() {
-    @Throws(IOException::class)
     override fun deserialize(
         p: JsonParser,
         ctxt: DeserializationContext?,
     ): BigDecimal? {
         return p.text
             ?.replace(",", ".")
-            ?.toBigDecimal()
+            ?.toBigDecimal(currencyRateMathContext)
+            ?.normalizeCurrencyRate()
     }
 }

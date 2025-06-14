@@ -32,6 +32,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.wiremock.integrations:wiremock-spring-boot:3.10.0")
+    testImplementation("org.assertj:assertj-core:3.27.3")
 }
 
 kotlin {

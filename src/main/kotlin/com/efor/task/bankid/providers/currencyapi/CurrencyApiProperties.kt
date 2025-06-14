@@ -1,9 +1,12 @@
-package com.efor.task.bankid.providers.currencyrate
+package com.efor.task.bankid.providers.currencyapi
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
+/**
+ * Configuration
+ */
 @ConfigurationProperties("external.currency-api")
-class CurrencyRateApiProperties(
+class CurrencyApiProperties(
     /**
      * Currency API server base HTTP url
      */

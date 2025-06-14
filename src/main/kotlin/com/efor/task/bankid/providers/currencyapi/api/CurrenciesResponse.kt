@@ -1,4 +1,4 @@
-package com.efor.task.bankid.providers.currencyrate
+package com.efor.task.bankid.providers.currencyapi.api
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
