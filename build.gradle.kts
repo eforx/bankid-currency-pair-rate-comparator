@@ -32,6 +32,9 @@ dependencies {
     // Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8")
 
+    // Observability
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     // TEST
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

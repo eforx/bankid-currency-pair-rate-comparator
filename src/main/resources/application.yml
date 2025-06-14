@@ -1,1 +1,9 @@
-spring.application.name: currency-pair-exchange-rate-comparator
+spring:
+  application:
+    name: currency-pair-exchange-rate-comparator
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
