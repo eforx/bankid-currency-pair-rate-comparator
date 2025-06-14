@@ -7,31 +7,41 @@ import java.math.BigDecimal
 /**
  * Service for performing operations related to currency exchange providers.
  */
-
 interface CurrencyExchangeService {
     /**
      * Retrieves a list of currency pairs that are common between two specified providers.
      *
-     * @param providerA The first currency exchange provider.
-     * @param providerB The second currency exchange provider.
-     * @return A list of common currency pairs supported by both providers.
-     * @throws IllegalArgumentException If the specified providers are the same.
+     * This method identifies currency pairs that are supported by both providers based on
+     * their available data. It ensures that only common pairs are returned, making it useful
+     * for comparisons or further processing involving both providers.
+     *
+     * @param providerA The identifier for the first currency exchange provider.
+     * @param providerB The identifier for the second currency exchange provider.
+     * @return A list of currency pairs that are supported by both providers.
+     * @throws IllegalArgumentException If the specified providers have the same identifier.
+     *                                  The providers must be distinct to ensure a meaningful comparison.
      */
+
     fun getCurrencyPairs(
         providerA: CurrencyExchangeProviderId,
         providerB: CurrencyExchangeProviderId
     ): List<CurrencyPair>
 
     /**
-     * Calculates the difference in exchange rates for a given currency pair between two providers.
+     * Calculates the difference in exchange rates for a specific currency pair between two providers.
      *
-     * @param sourceProvider The first provider to retrieve exchange rates from.
-     * @param destProvider The second provider to retrieve exchange rates from.
-     * @param sourceCurrency The source currency of the exchange rate pair.
-     * @param destCurrency The destination currency of the exchange rate pair.
-     * @return The difference in exchange rates as a BigDecimal.
-     * @throws IllegalArgumentException If the specified providers are the same
-     *                                  or if the source and destination currencies are the same.
+     * This method fetches the exchange rates of the specified currency pair from both providers
+     * and computes the difference. It validates that the providers and the currencies are distinct
+     * to ensure the comparison is valid.
+     *
+     * @param sourceProvider The identifier for the first provider to retrieve exchange rates from.
+     * @param destProvider The identifier for the second provider to retrieve exchange rates from.
+     * @param sourceCurrency The base currency of the currency pair being compared.
+     * @param destCurrency The quote currency of the currency pair being compared.
+     * @return The difference in exchange rates between the two providers as a `BigDecimal`.
+     * @throws IllegalArgumentException If the specified providers are the same, the source and
+     *                                  destination currencies are the same, or the currency pair is not
+     *                                  supported by both providers.
      */
     fun calculateCurrencyExchangeRateDiff(
         sourceProvider: CurrencyExchangeProviderId,

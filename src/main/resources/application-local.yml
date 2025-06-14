@@ -1,0 +1,5 @@
+external:
+  cnb:
+    url: https://www.cnb.cz
+  currency-api:
+    url: https://cdn.jsdelivr.net/

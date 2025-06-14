@@ -1,13 +1,32 @@
 package com.efor.task.bankid.app
 
+import com.efor.task.bankid.controller.CurrencyConfig
 import com.efor.task.bankid.providers.ProvidersConfig
+import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import java.math.BigDecimal
 
 @Configuration
 @Import(
     value = [
         ProvidersConfig::class,
+        CurrencyConfig::class
     ],
 )
-class CurrencyPairRateComparatorAppConfig
+class CurrencyPairRateComparatorAppConfig {
+    @Bean
+    fun jackson2ObjectMapperBuilderCustomizer(): Jackson2ObjectMapperBuilderCustomizer {
+        return Jackson2ObjectMapperBuilderCustomizer { customizer ->
+            customizer.modules(
+                SimpleModule()
+                    .apply {
+                        addSerializer(BigDecimal::class.java, ToStringSerializer.instance)
+                    }
+            )
+        }
+    }
+}
