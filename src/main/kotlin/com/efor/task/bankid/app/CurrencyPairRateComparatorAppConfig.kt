@@ -2,13 +2,16 @@ package com.efor.task.bankid.app
 
 import com.efor.task.bankid.controller.CurrencyConfig
 import com.efor.task.bankid.providers.ProvidersConfig
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import java.math.BigDecimal
+
 
 @Configuration
 @Import(
@@ -27,6 +30,8 @@ class CurrencyPairRateComparatorAppConfig {
                         addSerializer(BigDecimal::class.java, ToStringSerializer.instance)
                     }
             )
+            customizer.findModulesViaServiceLoader(true)
+            customizer.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         }
     }
 }
