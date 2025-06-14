@@ -8,6 +8,11 @@ A Spring Boot application that provides API endpoints for comparing currency exc
 - Calculate currency exchange rate differences between providers
 - Uses CNB (Czech National Bank) as a reference provider
 
+## Technical features
+- Logs HTTP requests and responses for better observability using Logbook
+- Implements caching using Caffeine to optimize performance
+- Provides health monitoring and metrics via Spring Boot Actuator endpoints (/actuator/health)
+
 ## Tech Stack
 
 - Kotlin 1.9
@@ -96,6 +101,44 @@ The application supports multiple Spring profiles:
 
 Configuration for external services is specified in the respective profile's configuration file (`application.yml`, `application-local.yml`).
 
+### HTTP Request Logging
+
+The application uses Logbook to log HTTP requests and responses, providing enhanced visibility for API interactions. This is especially useful for debugging external service calls and API usage.
+
+#### Logbook Configuration
+
+Logbook is configured in the application's logback.xml file. Here's an example configuration:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+    <logger name="org.zalando.logbook" level="TRACE" />
+</configuration>
+```
+
+In your application.yml, you can further customize Logbook behavior:
+
+```yaml
+logbook:
+  format.style: http
+  obfuscate:
+    headers:
+      - Authorization
+      - X-Secret
+  write:
+    category: http.wire-log
+    level: INFO
+  include:
+    - /api/**
+  exclude:
+    - /actuator/**
+```
+
 ### External Service Configuration
 
 The application uses the following properties to configure external currency exchange providers:
@@ -117,6 +160,30 @@ external:
 ```
 
 You can override these configurations in your `application-local.yml` for local development or testing with mock services.
+
+### Caching Configuration
+
+The application uses Caffeine for high-performance caching to improve response times and reduce load on external services. Caching is primarily used in the currency exchange service for frequently accessed data.
+
+#### Cache Usage
+
+Caching is implemented in the following areas:
+- Currency pairs retrieval (getCurrencyPairs)
+- Exchange rate calculations
+
+#### Example Cache Configuration
+
+```yaml
+spring:
+  cache:
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=600s
+    cache-names:
+      - getCurrencyPairs
+      - exchangeRates
+```
+
+The above configuration creates two caches with a maximum size of 500 entries each, and entries expire after 10 minutes.
 
 ### Example Configuration YAML
 
@@ -144,6 +211,38 @@ external:
 ```
 
 The resulting JAR will be located in `build/libs/`.
+
+## Monitoring and Health Checks
+
+The application includes Spring Boot Actuator for monitoring and health checks.
+
+### Health Endpoint
+
+The health endpoint provides information about the application's health status, including the status of external dependencies.
+
+```bash
+curl -X GET "http://localhost:8080/actuator/health" -H "accept: application/json"
+```
+
+Example Response:
+```json
+{
+  "status": "UP"
+}
+```
+
+By default, the following actuator endpoints are enabled:
+- /actuator/health
+
+You can enable additional endpoints in your application.yml:
+
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+```
 
 ## License
 
