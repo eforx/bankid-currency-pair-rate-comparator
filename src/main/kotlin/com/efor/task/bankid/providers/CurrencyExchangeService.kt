@@ -114,6 +114,14 @@ class DefaultCurrencyExchangeService(
         val sourceProviderService = currencyExchangeProviderRegistry.getProviderService(sourceProvider)
         val destProviderService = currencyExchangeProviderRegistry.getProviderService(destProvider)
 
+        val availableCurrencyPairs = getCurrencyPairs(sourceProvider, destProvider)
+        if (!availableCurrencyPairs.contains(sourceCurrency to destCurrency)) {
+            throw IllegalArgumentException(
+                "The requested currency pair is not on the list of available currencies. " +
+                        "sourceCurrency='$sourceCurrency', destCurrency='${destCurrency}'"
+            )
+        }
+
         val sourceProviderExchangeRate = sourceProviderService.getExchangeRate(sourceCurrency, destCurrency)
         val destProviderServiceExchangeRate = destProviderService.getExchangeRate(sourceCurrency, destCurrency)
 
@@ -132,7 +140,7 @@ class DefaultCurrencyExchangeService(
             .normalizeCurrencyRate()
             .also {
                 logger.info(
-                    "Calculated currency exchange rate difference. " +
+                    "Calculated currency exchange rate provider's difference. " +
                             "sourceProvider={}, destProvider={}, sourceCurrency='{}', destCurrency='{}', rateDiff={}",
                     sourceProvider, destProvider, sourceCurrency, destCurrency, it
                 )

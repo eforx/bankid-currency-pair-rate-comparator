@@ -6,6 +6,7 @@ import com.efor.task.bankid.providers.CurrencyExchangeProviderService
 import com.efor.task.bankid.providers.CurrencyPair
 import com.efor.task.bankid.providers.cnb.api.CnbCurrencyApi
 import com.efor.task.bankid.providers.currencyDivide
+import com.efor.task.bankid.providers.currencyMultiply
 import com.efor.task.bankid.providers.normalizeCurrencyName
 import com.efor.task.bankid.providers.normalizeCurrencyRate
 import org.slf4j.LoggerFactory
@@ -54,9 +55,9 @@ class CnbCurrencyExchangeProviderService(
                 .find { it.code.normalizeCurrencyName() == destCurrency }
                 ?: throw IllegalArgumentException("Destination currency not found. destCurrency='${destCurrency}'")
 
-            currencyExchangeInfo.amount
-                .toBigDecimal()
+            1.toBigDecimal()
                 .currencyDivide(currencyExchangeInfo.rate)
+                .currencyMultiply(currencyExchangeInfo.amount)
                 .normalizeCurrencyRate()
         } else {
             val currencyExchangeInfo = response.table

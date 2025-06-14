@@ -13,3 +13,4 @@ fun BigDecimal.normalizeCurrencyRate(): BigDecimal = this.setScale(
 
 fun BigDecimal.currencyDivide(divisor: Int): BigDecimal = this.divide(divisor.toBigDecimal(), currencyRateMathContext)
 fun BigDecimal.currencyDivide(divisor: BigDecimal): BigDecimal = this.divide(divisor, currencyRateMathContext)
+fun BigDecimal.currencyMultiply(divisor: Int): BigDecimal = this.multiply(divisor.toBigDecimal(), currencyRateMathContext)
