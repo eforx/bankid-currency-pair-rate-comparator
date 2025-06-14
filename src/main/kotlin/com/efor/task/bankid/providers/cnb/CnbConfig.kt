@@ -1,4 +1,4 @@
-package com.efor.task.bankid.cnb
+package com.efor.task.bankid.providers.cnb
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean

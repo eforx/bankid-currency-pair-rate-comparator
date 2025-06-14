@@ -1,4 +1,4 @@
-package com.efor.task.bankid.cnb
+package com.efor.task.bankid.providers.cnb
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
