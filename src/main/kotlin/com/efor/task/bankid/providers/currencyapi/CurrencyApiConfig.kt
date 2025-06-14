@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.client.RestClient
+import org.zalando.logbook.Logbook
+import org.zalando.logbook.spring.LogbookClientHttpRequestInterceptor
 
 
 @Configuration
@@ -29,6 +31,7 @@ class CurrencyApiConfig {
 
     @Bean
     fun currencyApiRestClient(
+        logbook: Logbook?,
         currencyApiProperties: CurrencyApiProperties
     ): RestClient {
         return RestClient.builder()
@@ -44,6 +47,10 @@ class CurrencyApiConfig {
 
                 converters.clear()
                 converters.addAll(newConverters)
+            }.also { builder ->
+                logbook?.let {
+                    builder.requestInterceptor(LogbookClientHttpRequestInterceptor(it))
+                }
             }
             .build()
     }

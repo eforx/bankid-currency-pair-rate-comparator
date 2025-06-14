@@ -34,6 +34,7 @@ dependencies {
 
     // Observability
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.zalando:logbook-spring-boot-starter:3.12.1")
 
     // TEST
     testImplementation("org.springframework.boot:spring-boot-starter-test")

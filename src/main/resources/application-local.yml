@@ -3,3 +3,7 @@ external:
     url: https://www.cnb.cz
   currency-api:
     url: https://cdn.jsdelivr.net
+
+logbook:
+  format:
+    style: http
