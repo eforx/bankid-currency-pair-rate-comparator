@@ -17,7 +17,6 @@ import java.math.BigDecimal
 class CnbCurrencyExchangeProviderService(
     private val cnbCurrencyApi: CnbCurrencyApi,
 ) : CurrencyExchangeProviderService {
-
     companion object {
         private val logger = LoggerFactory.getLogger(CnbCurrencyExchangeProviderService::class.java)
     }
@@ -32,38 +31,43 @@ class CnbCurrencyExchangeProviderService(
             .flatMap {
                 listOf(
                     CurrencyPair(Currencies.CZK, it.code.normalizeCurrencyName()),
-                    CurrencyPair(it.code.normalizeCurrencyName(), Currencies.CZK)
+                    CurrencyPair(it.code.normalizeCurrencyName(), Currencies.CZK),
                 )
             }
     }
 
-    override fun getExchangeRate(sourceCurrency: String, destCurrency: String): BigDecimal {
+    override fun getExchangeRate(
+        sourceCurrency: String,
+        destCurrency: String,
+    ): BigDecimal {
         logger.info("Get currency exchange rate. sourceCurrency='{}', destCurrency='{}'", sourceCurrency, destCurrency)
 
         if (Currencies.CZK != sourceCurrency && Currencies.CZK != destCurrency) {
             throw IllegalArgumentException(
                 "Unsupported currency. CNB currency provider supports exchange rates " +
-                        "for ${Currencies.CZK} currency only. " +
-                        "sourceCurrency='${sourceCurrency}', destCurrency='${destCurrency}'",
+                    "for ${Currencies.CZK} currency only. " +
+                    "sourceCurrency='$sourceCurrency', destCurrency='$destCurrency'",
             )
         }
 
         val response = cnbCurrencyApi.fetchDailyExchangeRate()
         return if (Currencies.CZK == sourceCurrency) {
-            val currencyExchangeInfo = response.table
-                .rows
-                .find { it.code.normalizeCurrencyName() == destCurrency }
-                ?: throw IllegalArgumentException("Destination currency not found. destCurrency='${destCurrency}'")
+            val currencyExchangeInfo =
+                response.table
+                    .rows
+                    .find { it.code.normalizeCurrencyName() == destCurrency }
+                    ?: throw IllegalArgumentException("Destination currency not found. destCurrency='$destCurrency'")
 
             1.toBigDecimal()
                 .currencyDivide(currencyExchangeInfo.rate)
                 .currencyMultiply(currencyExchangeInfo.amount)
                 .normalizeCurrencyRate()
         } else {
-            val currencyExchangeInfo = response.table
-                .rows
-                .find { it.code.normalizeCurrencyName() == sourceCurrency }
-                ?: throw IllegalArgumentException("Source currency not found. sourceCurrency='${sourceCurrency}'")
+            val currencyExchangeInfo =
+                response.table
+                    .rows
+                    .find { it.code.normalizeCurrencyName() == sourceCurrency }
+                    ?: throw IllegalArgumentException("Source currency not found. sourceCurrency='$sourceCurrency'")
 
             currencyExchangeInfo.rate
                 .currencyDivide(currencyExchangeInfo.amount)

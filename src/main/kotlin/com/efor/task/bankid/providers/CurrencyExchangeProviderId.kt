@@ -5,5 +5,5 @@ package com.efor.task.bankid.providers
  */
 enum class CurrencyExchangeProviderId {
     CNB,
-    CURRENCY_API
+    CURRENCY_API,
 }

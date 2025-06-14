@@ -25,7 +25,7 @@ interface CurrencyExchangeService {
 
     fun getCurrencyPairs(
         providerA: CurrencyExchangeProviderId,
-        providerB: CurrencyExchangeProviderId
+        providerB: CurrencyExchangeProviderId,
     ): List<CurrencyPair>
 
     /**
@@ -56,7 +56,6 @@ interface CurrencyExchangeService {
 class DefaultCurrencyExchangeService(
     private val currencyExchangeProviderRegistry: CurrencyExchangeProviderRegistry,
 ) : CurrencyExchangeService {
-
     companion object {
         private val logger = LoggerFactory.getLogger(DefaultCurrencyExchangeService::class.java)
     }
@@ -83,13 +82,13 @@ class DefaultCurrencyExchangeService(
                 "Provider currencies. provider={}, count={}, items={}",
                 providerA,
                 providerCurrencyPairsA.size,
-                providerCurrencyPairsA
+                providerCurrencyPairsA,
             )
             logger.debug(
                 "Provider currencies. provider={}, count={}, items={}",
                 providerB,
                 providerCurrencyPairsB.size,
-                providerCurrencyPairsB
+                providerCurrencyPairsB,
             )
         }
 
@@ -108,12 +107,15 @@ class DefaultCurrencyExchangeService(
         sourceProvider: CurrencyExchangeProviderId,
         destProvider: CurrencyExchangeProviderId,
         sourceCurrency: String,
-        destCurrency: String
+        destCurrency: String,
     ): BigDecimal {
         logger.info(
             "Get currency exchange rate difference. " +
-                    "sourceProvider={}, destProvider={}, sourceCurrency='{}', destCurrency='{}'",
-            sourceProvider, destProvider, sourceCurrency, destCurrency
+                "sourceProvider={}, destProvider={}, sourceCurrency='{}', destCurrency='{}'",
+            sourceProvider,
+            destProvider,
+            sourceCurrency,
+            destCurrency,
         )
 
         if (sourceProvider == destProvider) {
@@ -131,7 +133,7 @@ class DefaultCurrencyExchangeService(
         if (!availableCurrencyPairs.contains(sourceCurrency to destCurrency)) {
             throw IllegalArgumentException(
                 "The requested currency pair is not on the list of available currencies. " +
-                        "sourceCurrency='$sourceCurrency', destCurrency='${destCurrency}'"
+                    "sourceCurrency='$sourceCurrency', destCurrency='$destCurrency'",
             )
         }
 
@@ -140,13 +142,19 @@ class DefaultCurrencyExchangeService(
 
         logger.info(
             "Currency exchange rate - source provider. " +
-                    "sourceProvider={}, sourceCurrency='{}', destCurrency='{}', rate={}",
-            sourceProvider, sourceCurrency, destCurrency, sourceProviderExchangeRate
+                "sourceProvider={}, sourceCurrency='{}', destCurrency='{}', rate={}",
+            sourceProvider,
+            sourceCurrency,
+            destCurrency,
+            sourceProviderExchangeRate,
         )
         logger.info(
             "Currency exchange rate - dest provider. " +
-                    "destProvider={}, sourceCurrency='{}', destCurrency='{}', rate={}",
-            destProvider, sourceCurrency, destCurrency, destProviderServiceExchangeRate
+                "destProvider={}, sourceCurrency='{}', destCurrency='{}', rate={}",
+            destProvider,
+            sourceCurrency,
+            destCurrency,
+            destProviderServiceExchangeRate,
         )
 
         return sourceProviderExchangeRate.subtract(destProviderServiceExchangeRate)
@@ -154,8 +162,12 @@ class DefaultCurrencyExchangeService(
             .also {
                 logger.info(
                     "Calculated currency exchange rate provider's difference. " +
-                            "sourceProvider={}, destProvider={}, sourceCurrency='{}', destCurrency='{}', rateDiff={}",
-                    sourceProvider, destProvider, sourceCurrency, destCurrency, it
+                        "sourceProvider={}, destProvider={}, sourceCurrency='{}', destCurrency='{}', rateDiff={}",
+                    sourceProvider,
+                    destProvider,
+                    sourceCurrency,
+                    destCurrency,
+                    it,
                 )
             }
     }

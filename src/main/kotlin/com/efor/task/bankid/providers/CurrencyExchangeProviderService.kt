@@ -22,12 +22,14 @@ interface CurrencyExchangeProviderService {
      * @return The provider's identifier.
      */
     fun identifier(): CurrencyExchangeProviderId
+
     /**
      * Gets a list of currency pairs supported by this provider.
      *
      * @return A list of supported currency pairs.
      */
     fun getCurrencyPairs(): List<CurrencyPair>
+
     /**
      * Gets the exchange rate between two currencies.
      *
@@ -37,5 +39,8 @@ interface CurrencyExchangeProviderService {
      * @throws IllegalArgumentException If one of the currencies is not supported.
      * @throws IllegalStateException If the exchange rate cannot be retrieved.
      */
-    fun getExchangeRate(sourceCurrency: String, destCurrency: String): BigDecimal
+    fun getExchangeRate(
+        sourceCurrency: String,
+        destCurrency: String,
+    ): BigDecimal
 }

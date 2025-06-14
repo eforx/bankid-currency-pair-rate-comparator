@@ -14,11 +14,10 @@ import org.springframework.web.client.RestClient
 import org.zalando.logbook.Logbook
 import org.zalando.logbook.spring.LogbookClientHttpRequestInterceptor
 
-
 @Configuration
 @Import(
     DefaultCurrencyApi::class,
-    CurrencyApiCurrencyExchangeProviderService::class
+    CurrencyApiCurrencyExchangeProviderService::class,
 )
 @EnableConfigurationProperties(CurrencyApiProperties::class)
 class CurrencyApiConfig {
@@ -32,18 +31,19 @@ class CurrencyApiConfig {
     @Bean
     fun currencyApiRestClient(
         logbook: Logbook?,
-        currencyApiProperties: CurrencyApiProperties
+        currencyApiProperties: CurrencyApiProperties,
     ): RestClient {
         return RestClient.builder()
             .baseUrl(currencyApiProperties.url)
             .messageConverters { converters ->
-                val newConverters = converters.map {
-                    if (it is MappingJackson2HttpMessageConverter) {
-                        MappingJackson2HttpMessageConverter(currencyApiObjectMapper())
-                    } else {
-                        it
+                val newConverters =
+                    converters.map {
+                        if (it is MappingJackson2HttpMessageConverter) {
+                            MappingJackson2HttpMessageConverter(currencyApiObjectMapper())
+                        } else {
+                            it
+                        }
                     }
-                }
 
                 converters.clear()
                 converters.addAll(newConverters)

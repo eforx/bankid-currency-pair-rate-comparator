@@ -20,8 +20,9 @@ interface CurrencyExchangeProviderRegistry {
 class DefaultCurrencyExchangeProviderRegistry(
     exchangeProviders: List<CurrencyExchangeProviderService>,
 ) : CurrencyExchangeProviderRegistry {
-    val exchangeProviders: Map<CurrencyExchangeProviderId, CurrencyExchangeProviderService> = exchangeProviders
-        .associateBy { it.identifier() }
+    val exchangeProviders: Map<CurrencyExchangeProviderId, CurrencyExchangeProviderService> =
+        exchangeProviders
+            .associateBy { it.identifier() }
 
     override fun getProviderService(provider: CurrencyExchangeProviderId): CurrencyExchangeProviderService {
         return exchangeProviders[provider]

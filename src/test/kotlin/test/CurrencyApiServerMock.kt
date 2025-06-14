@@ -6,7 +6,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 
 class CurrencyApiServerMock(
-    private val wireMock: WireMockServer
+    private val wireMock: WireMockServer,
 ) {
     fun mockCurrencyList() {
         wireMock.stubFor(
@@ -60,8 +60,8 @@ class CurrencyApiServerMock(
         wireMock.verify(
             count,
             WireMock.getRequestedFor(
-                WireMock.urlEqualTo("/npm/@fawazahmed0/currency-api@latest/v1/currencies.json")
-            )
+                WireMock.urlEqualTo("/npm/@fawazahmed0/currency-api@latest/v1/currencies.json"),
+            ),
         )
     }
 
@@ -69,8 +69,8 @@ class CurrencyApiServerMock(
         wireMock.verify(
             count,
             WireMock.getRequestedFor(
-                WireMock.urlEqualTo("/npm/@fawazahmed0/currency-api@latest/v1/currencies/czk.json")
-            )
+                WireMock.urlEqualTo("/npm/@fawazahmed0/currency-api@latest/v1/currencies/czk.json"),
+            ),
         )
     }
 
@@ -78,8 +78,8 @@ class CurrencyApiServerMock(
         wireMock.verify(
             count,
             WireMock.getRequestedFor(
-                WireMock.urlEqualTo("/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json")
-            )
+                WireMock.urlEqualTo("/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json"),
+            ),
         )
     }
 
@@ -87,8 +87,8 @@ class CurrencyApiServerMock(
         wireMock.verify(
             count,
             WireMock.getRequestedFor(
-                WireMock.urlEqualTo("/npm/@fawazahmed0/currency-api@latest/v1/currencies/jpy.json")
-            )
+                WireMock.urlEqualTo("/npm/@fawazahmed0/currency-api@latest/v1/currencies/jpy.json"),
+            ),
         )
     }
 }

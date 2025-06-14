@@ -12,14 +12,14 @@ import org.zalando.logbook.spring.LogbookClientHttpRequestInterceptor
 @Configuration
 @Import(
     DefaultCnbCurrencyApi::class,
-    CnbCurrencyExchangeProviderService::class
+    CnbCurrencyExchangeProviderService::class,
 )
 @EnableConfigurationProperties(CnbProperties::class)
 class CnbConfig {
     @Bean
     fun cnbRestClient(
         logbook: Logbook?,
-        cnbProperties: CnbProperties
+        cnbProperties: CnbProperties,
     ): RestClient {
         return RestClient.builder()
             .baseUrl(cnbProperties.url)

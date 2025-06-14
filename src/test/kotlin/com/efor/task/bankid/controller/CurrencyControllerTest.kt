@@ -27,8 +27,8 @@ import test.CurrencyApiServerMock
         CurrencyPairRateComparatorAppConfig::class,
         JacksonAutoConfiguration::class,
         HttpMessageConvertersAutoConfiguration::class,
-        WebMvcAutoConfiguration::class
-    ]
+        WebMvcAutoConfiguration::class,
+    ],
 )
 @AutoConfigureMockMvc
 @EnableWireMock(
@@ -44,7 +44,7 @@ import test.CurrencyApiServerMock
     ],
 )
 class CurrencyControllerTest(
-    @Autowired private val mockMvc: MockMvc
+    @Autowired private val mockMvc: MockMvc,
 ) {
     @InjectWireMock("cnb-service")
     private lateinit var cnbMockService: WireMockServer
@@ -127,5 +127,4 @@ class CurrencyControllerTest(
         currencyApiServerMock.verifyCurrencyListCall()
         currencyApiServerMock.verifyEurExchangeRateCall()
     }
-
 }

@@ -1,7 +1,6 @@
 package com.efor.task.bankid.providers
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -50,15 +49,17 @@ class DefaultCurrencyExchangeServiceTest(
         cnbServerMock.mockDailyExchangeRate()
         currencyApiServerMock.mockCurrencyList()
 
-        val currencyPairsResultA = currencyExchangeService.getCurrencyPairs(
-            CurrencyExchangeProviderId.CNB,
-            CurrencyExchangeProviderId.CURRENCY_API
-        )
+        val currencyPairsResultA =
+            currencyExchangeService.getCurrencyPairs(
+                CurrencyExchangeProviderId.CNB,
+                CurrencyExchangeProviderId.CURRENCY_API,
+            )
 
-        val currencyPairsResultB = currencyExchangeService.getCurrencyPairs(
-            CurrencyExchangeProviderId.CURRENCY_API,
-            CurrencyExchangeProviderId.CNB
-        )
+        val currencyPairsResultB =
+            currencyExchangeService.getCurrencyPairs(
+                CurrencyExchangeProviderId.CURRENCY_API,
+                CurrencyExchangeProviderId.CNB,
+            )
 
         cnbServerMock.verifyDailyExchangeRateCall(2)
         currencyApiServerMock.verifyCurrencyListCall(2)
@@ -117,30 +118,34 @@ class DefaultCurrencyExchangeServiceTest(
         currencyApiServerMock.mockCzkExchangeRate()
         currencyApiServerMock.mockEurExchangeRate()
 
-        val diffCzkEurA = currencyExchangeService.calculateCurrencyExchangeRateDiff(
-            CurrencyExchangeProviderId.CNB,
-            CurrencyExchangeProviderId.CURRENCY_API,
-            "CZK",
-            "EUR",
-        )
-        val diffEurCzkA = currencyExchangeService.calculateCurrencyExchangeRateDiff(
-            CurrencyExchangeProviderId.CNB,
-            CurrencyExchangeProviderId.CURRENCY_API,
-            "EUR",
-            "CZK",
-        )
-        val diffCzkEurB = currencyExchangeService.calculateCurrencyExchangeRateDiff(
-            CurrencyExchangeProviderId.CURRENCY_API,
-            CurrencyExchangeProviderId.CNB,
-            "CZK",
-            "EUR",
-        )
-        val diffEurCzkB = currencyExchangeService.calculateCurrencyExchangeRateDiff(
-            CurrencyExchangeProviderId.CURRENCY_API,
-            CurrencyExchangeProviderId.CNB,
-            "EUR",
-            "CZK",
-        )
+        val diffCzkEurA =
+            currencyExchangeService.calculateCurrencyExchangeRateDiff(
+                CurrencyExchangeProviderId.CNB,
+                CurrencyExchangeProviderId.CURRENCY_API,
+                "CZK",
+                "EUR",
+            )
+        val diffEurCzkA =
+            currencyExchangeService.calculateCurrencyExchangeRateDiff(
+                CurrencyExchangeProviderId.CNB,
+                CurrencyExchangeProviderId.CURRENCY_API,
+                "EUR",
+                "CZK",
+            )
+        val diffCzkEurB =
+            currencyExchangeService.calculateCurrencyExchangeRateDiff(
+                CurrencyExchangeProviderId.CURRENCY_API,
+                CurrencyExchangeProviderId.CNB,
+                "CZK",
+                "EUR",
+            )
+        val diffEurCzkB =
+            currencyExchangeService.calculateCurrencyExchangeRateDiff(
+                CurrencyExchangeProviderId.CURRENCY_API,
+                CurrencyExchangeProviderId.CNB,
+                "EUR",
+                "CZK",
+            )
 
         cnbServerMock.verifyDailyExchangeRateCall(8)
         currencyApiServerMock.verifyCurrencyListCall(4)
@@ -160,30 +165,34 @@ class DefaultCurrencyExchangeServiceTest(
         currencyApiServerMock.mockCzkExchangeRate()
         currencyApiServerMock.mockJpyExchangeRate()
 
-        val diffCzkJpyA = currencyExchangeService.calculateCurrencyExchangeRateDiff(
-            CurrencyExchangeProviderId.CNB,
-            CurrencyExchangeProviderId.CURRENCY_API,
-            "CZK",
-            "JPY",
-        )
-        val diffJpyCzkA = currencyExchangeService.calculateCurrencyExchangeRateDiff(
-            CurrencyExchangeProviderId.CNB,
-            CurrencyExchangeProviderId.CURRENCY_API,
-            "JPY",
-            "CZK",
-        )
-        val diffCzkJpyB = currencyExchangeService.calculateCurrencyExchangeRateDiff(
-            CurrencyExchangeProviderId.CURRENCY_API,
-            CurrencyExchangeProviderId.CNB,
-            "CZK",
-            "JPY",
-        )
-        val diffJpyCzkB = currencyExchangeService.calculateCurrencyExchangeRateDiff(
-            CurrencyExchangeProviderId.CURRENCY_API,
-            CurrencyExchangeProviderId.CNB,
-            "JPY",
-            "CZK",
-        )
+        val diffCzkJpyA =
+            currencyExchangeService.calculateCurrencyExchangeRateDiff(
+                CurrencyExchangeProviderId.CNB,
+                CurrencyExchangeProviderId.CURRENCY_API,
+                "CZK",
+                "JPY",
+            )
+        val diffJpyCzkA =
+            currencyExchangeService.calculateCurrencyExchangeRateDiff(
+                CurrencyExchangeProviderId.CNB,
+                CurrencyExchangeProviderId.CURRENCY_API,
+                "JPY",
+                "CZK",
+            )
+        val diffCzkJpyB =
+            currencyExchangeService.calculateCurrencyExchangeRateDiff(
+                CurrencyExchangeProviderId.CURRENCY_API,
+                CurrencyExchangeProviderId.CNB,
+                "CZK",
+                "JPY",
+            )
+        val diffJpyCzkB =
+            currencyExchangeService.calculateCurrencyExchangeRateDiff(
+                CurrencyExchangeProviderId.CURRENCY_API,
+                CurrencyExchangeProviderId.CNB,
+                "JPY",
+                "CZK",
+            )
 
         cnbServerMock.verifyDailyExchangeRateCall(8)
         currencyApiServerMock.verifyCurrencyListCall(4)

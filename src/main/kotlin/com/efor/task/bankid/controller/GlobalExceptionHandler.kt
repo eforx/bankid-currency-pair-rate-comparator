@@ -11,14 +11,15 @@ class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(
         ex: IllegalArgumentException,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): ResponseEntity<ApiError> {
-        val error = ApiError(
-            status = HttpStatus.BAD_REQUEST.value(),
-            error = HttpStatus.BAD_REQUEST.reasonPhrase,
-            message = ex.message ?: "Invalid request",
-            path = request.requestURI
-        )
+        val error =
+            ApiError(
+                status = HttpStatus.BAD_REQUEST.value(),
+                error = HttpStatus.BAD_REQUEST.reasonPhrase,
+                message = ex.message ?: "Invalid request",
+                path = request.requestURI,
+            )
 
         return ResponseEntity<ApiError>(error, HttpStatus.BAD_REQUEST)
     }

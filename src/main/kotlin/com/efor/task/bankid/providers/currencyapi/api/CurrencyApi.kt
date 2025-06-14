@@ -70,7 +70,7 @@ class DefaultCurrencyApi(
                     logger.debug(
                         "Currency rates have been fetched from Currency API. currency='{}', rates={}",
                         currency,
-                        it.rates
+                        it.rates,
                     )
                 }
             }
