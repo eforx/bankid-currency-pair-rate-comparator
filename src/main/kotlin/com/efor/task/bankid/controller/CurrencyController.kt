@@ -34,18 +34,21 @@ class CurrencyController(
             ApiResponse(
                 responseCode = "200",
                 description = "List of available currency pairs",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = CurrencyPairsResponse::class))]
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = CurrencyPairsResponse::class)
+                )]
             )
         ]
     )
     @GetMapping("/pairs", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getAvailableCurrencyPairs(
         @Parameter(description = "Currency exchange provider ID", required = true)
-        @RequestParam currencyExchangeProviderId: CurrencyExchangeProviderId
+        @RequestParam currencyExchangeProviderId: PublicCurrencyExchangeProviderId
     ): CurrencyPairsResponse {
         return currencyExchangeService.getCurrencyPairs(
             providerA = CurrencyExchangeProviderId.CNB,
-            providerB = currencyExchangeProviderId,
+            providerB = currencyExchangeProviderId.toInternal(),
         ).let { pairs ->
             CurrencyPairsResponse(pairs.map {
                 CurrencyPair(
@@ -65,16 +68,19 @@ class CurrencyController(
             ApiResponse(
                 responseCode = "200",
                 description = "Exchange rate difference calculated successfully",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = CurrencyExchangeRateDiffResponse::class))]
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = CurrencyExchangeRateDiffResponse::class)
+                )]
             )
         ]
     )
     @GetMapping("/exchange-rate-diff")
     fun getCurrencyExchangeRateDiff(
         @Parameter(description = "Currency exchange provider ID to compare with CNB", required = true)
-        @RequestParam currencyExchangeProviderId: CurrencyExchangeProviderId,
+        @RequestParam currencyExchangeProviderId: PublicCurrencyExchangeProviderId,
 
-        @Parameter(description = "Source currency code", example = "USD", required = true)
+        @Parameter(description = "Source currency code", example = "CZK", required = true)
         @RequestParam sourceCurrency: String,
 
         @Parameter(description = "Destination currency code", example = "EUR", required = true)
@@ -82,7 +88,7 @@ class CurrencyController(
     ): CurrencyExchangeRateDiffResponse {
         return currencyExchangeService.calculateCurrencyExchangeRateDiff(
             sourceProvider = CurrencyExchangeProviderId.CNB,
-            destProvider = currencyExchangeProviderId,
+            destProvider = currencyExchangeProviderId.toInternal(),
             sourceCurrency = sourceCurrency.normalizeCurrencyName(),
             destCurrency = destCurrency.normalizeCurrencyName(),
         ).let { CurrencyExchangeRateDiffResponse(it) }
