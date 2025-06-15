@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
@@ -61,6 +62,7 @@ class CurrencyControllerTest(
     }
 
     @Test
+    @WithMockUser(username = "user")
     fun `getAvailableCurrencyPairs - Unknown provider`() {
         mockMvc.perform(get("/api/currency/pairs?currencyExchangeProviderId=awesome_provider"))
             .andDo(print())
@@ -68,6 +70,7 @@ class CurrencyControllerTest(
     }
 
     @Test
+    @WithMockUser(username = "user")
     fun getAvailableCurrencyPairs() {
         cnbServerMock.mockDailyExchangeRate()
         currencyApiServerMock.mockCurrencyList()
@@ -84,6 +87,7 @@ class CurrencyControllerTest(
     }
 
     @Test
+    @WithMockUser(username = "user")
     fun `getCurrencyExchangeRateDiff - Unsupported currency pair`() {
         cnbServerMock.mockDailyExchangeRate()
         currencyApiServerMock.mockCurrencyList()
@@ -97,6 +101,7 @@ class CurrencyControllerTest(
     }
 
     @Test
+    @WithMockUser(username = "user")
     fun `getCurrencyExchangeRateDiff - CZK-EUR`() {
         cnbServerMock.mockDailyExchangeRate()
         currencyApiServerMock.mockCurrencyList()
@@ -113,6 +118,7 @@ class CurrencyControllerTest(
     }
 
     @Test
+    @WithMockUser(username = "user")
     fun `getCurrencyExchangeRateDiff - EUR-CZK`() {
         cnbServerMock.mockDailyExchangeRate()
         currencyApiServerMock.mockCurrencyList()
