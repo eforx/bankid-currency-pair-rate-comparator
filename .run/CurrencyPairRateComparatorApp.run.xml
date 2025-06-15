@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CurrencyPairRateComparatorApp" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <option name="ACTIVE_PROFILES" value="local" />
+    <module name="currency-pair-exchange-rate-comparator.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.efor.task.bankid.app.CurrencyPairRateComparatorApp" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
