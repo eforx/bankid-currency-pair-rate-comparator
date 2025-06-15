@@ -102,6 +102,7 @@ The application supports the following currency exchange providers:
 
 - CNB (Czech National Bank) - Used as a reference provider
 - CURRENCY_API - External currency exchange rate provider
+  - https://github.com/fawazahmed0/exchange-api
 
 ## Configuration
 
@@ -187,7 +188,7 @@ The application uses Caffeine for high-performance caching to improve response t
 #### Cache Usage
 
 Caching is implemented in the following areas:
-- Currency pairs retrieval (getCurrencyPairs)
+- Currency pairs retrieval
 - Exchange rate calculations
 
 #### Example Cache Configuration
