@@ -10,6 +10,16 @@ spring:
     caffeine:
       spec: maximumSize=100,expireAfterWrite=15m
 
+  security:
+    user:
+      name: user
+      password: 1234
+
 logbook:
   format:
     style: http
+  predicate:
+    exclude:
+      - path: "/v3/api-docs"
+      - path: "/v3/api-docs/**"
+      - path: "/swagger-ui/**"
