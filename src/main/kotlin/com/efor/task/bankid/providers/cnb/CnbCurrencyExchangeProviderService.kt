@@ -51,7 +51,12 @@ class CnbCurrencyExchangeProviderService(
         }
 
         val response = cnbCurrencyApi.fetchDailyExchangeRate()
+
         return if (Currencies.CZK == sourceCurrency) {
+            // Perform the exchange rate calculation when CZK is the source currency.
+            // This block handles conversions **from CNB's reference currency (CZK)** to the target currency.
+            // It looks up the target currency in the CNB data, validates it, and calculates the rate,
+            // considering both the provided rate and the unit's amount for precision adjustments.
             val currencyExchangeInfo =
                 response.table
                     .rows
@@ -63,6 +68,10 @@ class CnbCurrencyExchangeProviderService(
                 .currencyMultiply(currencyExchangeInfo.amount)
                 .normalizeCurrencyRate()
         } else {
+            // Calculate the exchange rate when CZK is the destination currency.
+            // This handles conversions **to the CNB's reference currency (CZK)** from a foreign currency.
+            // The source currency is validated, and then its rate is sourced from CNB data. The calculation
+            // ensures the proper division of the rate by the unit amount for accurate conversion.
             val currencyExchangeInfo =
                 response.table
                     .rows
