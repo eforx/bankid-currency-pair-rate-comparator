@@ -2,7 +2,12 @@ package com.efor.task.bankid.providers.currencyapi.api
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+/**
+ * Generated
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class CurrenciesResponse(
     private val names: MutableMap<String, String> = mutableMapOf(),
 ) {

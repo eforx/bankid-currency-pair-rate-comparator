@@ -16,15 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
-@RestController
 @RequestMapping(
     value = ["/api/currency"],
     produces = [MediaType.APPLICATION_JSON_VALUE],
 )
 @Tag(name = "Currency Exchange", description = "Currency exchange rates and pairs API")
-class CurrencyController(
-    private val currencyExchangeService: CurrencyExchangeService,
-) {
+interface CurrencyControllerApi {
     @Operation(
         summary = "Get available currency pairs",
         description = "Returns all available currency pairs between CNB and the specified provider",
@@ -47,21 +44,7 @@ class CurrencyController(
     fun getAvailableCurrencyPairs(
         @Parameter(description = "Currency exchange provider ID", required = true)
         @RequestParam currencyExchangeProviderId: PublicCurrencyExchangeProviderId,
-    ): CurrencyPairsResponse {
-        return currencyExchangeService.getCurrencyPairs(
-            providerA = CurrencyExchangeProviderId.CNB,
-            providerB = currencyExchangeProviderId.toInternal(),
-        ).let { pairs ->
-            CurrencyPairsResponse(
-                pairs.map {
-                    CurrencyPair(
-                        source = it.first,
-                        dest = it.second,
-                    )
-                },
-            )
-        }
-    }
+    ): CurrencyPairsResponse
 
     @Operation(
         summary = "Get currency exchange rate difference",
@@ -89,6 +72,33 @@ class CurrencyController(
         @RequestParam sourceCurrency: String,
         @Parameter(description = "Destination currency code", example = "EUR", required = true)
         @RequestParam destCurrency: String,
+    ): CurrencyExchangeRateDiffResponse
+}
+
+@RestController
+class CurrencyController(
+    private val currencyExchangeService: CurrencyExchangeService,
+) : CurrencyControllerApi {
+    override fun getAvailableCurrencyPairs(currencyExchangeProviderId: PublicCurrencyExchangeProviderId): CurrencyPairsResponse {
+        return currencyExchangeService.getCurrencyPairs(
+            providerA = CurrencyExchangeProviderId.CNB,
+            providerB = currencyExchangeProviderId.toInternal(),
+        ).let { pairs ->
+            CurrencyPairsResponse(
+                pairs.map {
+                    CurrencyPair(
+                        source = it.first,
+                        dest = it.second,
+                    )
+                },
+            )
+        }
+    }
+
+    override fun getCurrencyExchangeRateDiff(
+        currencyExchangeProviderId: PublicCurrencyExchangeProviderId,
+        sourceCurrency: String,
+        destCurrency: String,
     ): CurrencyExchangeRateDiffResponse {
         return currencyExchangeService.calculateCurrencyExchangeRateDiff(
             sourceProvider = CurrencyExchangeProviderId.CNB,

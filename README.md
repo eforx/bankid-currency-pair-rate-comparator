@@ -39,6 +39,12 @@ By default, the application will start with the default profile. To use a specif
 ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
 
+Alternatively, if you have already built the JAR file, you can run it directly with a specific profile:
+
+```bash
+java -Dspring.profiles.active=local -jar build/libs/currency-pair-exchange-rate-comparator-0.0.1-SNAPSHOT.jar
+```
+
 The `local` Spring profile comes with predefined settings.
 
 #### Default credentials for basic authentication

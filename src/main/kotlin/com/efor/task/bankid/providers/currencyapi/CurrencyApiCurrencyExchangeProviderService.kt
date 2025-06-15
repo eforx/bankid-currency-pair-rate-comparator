@@ -25,6 +25,7 @@ class CurrencyApiCurrencyExchangeProviderService(
         val response = currencyApi.fetchCurrencies()
         return response.getNames()
             .flatMap {
+                // Simplified - the provider supports the entire matrix of rates, we have selected only rates for CZK.
                 listOf(
                     CurrencyPair(Currencies.CZK, it.key.normalizeCurrencyName()),
                     CurrencyPair(it.key.normalizeCurrencyName(), Currencies.CZK),
@@ -43,7 +44,7 @@ class CurrencyApiCurrencyExchangeProviderService(
         val currencyRates =
             response.rates[sourceCurrency.lowercase()]
                 ?: throw IllegalStateException(
-                    "Exceptected currency exchange rate list not found. currency='$sourceCurrency'",
+                    "Expected source currency exchange rate list not found. currency='$sourceCurrency'",
                 )
 
         return currencyRates[destCurrency.lowercase()]

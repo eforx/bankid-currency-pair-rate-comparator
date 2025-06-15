@@ -1,6 +1,7 @@
 package com.efor.task.bankid.app
 
-import com.efor.task.bankid.controller.CurrencyConfig
+import com.efor.task.bankid.common.GlobalExceptionHandler
+import com.efor.task.bankid.controller.CurrencyControllerConfig
 import com.efor.task.bankid.providers.ProvidersConfig
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
@@ -14,8 +15,9 @@ import java.math.BigDecimal
 @Configuration
 @Import(
     value = [
+        GlobalExceptionHandler::class,
+        CurrencyControllerConfig::class,
         ProvidersConfig::class,
-        CurrencyConfig::class,
     ],
 )
 class CurrencyPairRateComparatorAppConfig {

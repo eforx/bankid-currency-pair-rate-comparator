@@ -1,4 +1,4 @@
-package com.efor.task.bankid.controller
+package com.efor.task.bankid.common
 
 import java.time.Instant
 

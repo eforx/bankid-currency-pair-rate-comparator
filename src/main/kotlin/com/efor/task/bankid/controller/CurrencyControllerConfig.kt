@@ -6,6 +6,5 @@ import org.springframework.context.annotation.Import
 @Configuration
 @Import(
     CurrencyController::class,
-    GlobalExceptionHandler::class,
 )
-class CurrencyConfig
+class CurrencyControllerConfig

@@ -6,7 +6,7 @@ import java.math.RoundingMode
 
 fun String.normalizeCurrencyName(): String = this.uppercase()
 
-val currencyRateMathContext = MathContext(12, RoundingMode.HALF_UP)
+val currencyRateMathContext = MathContext(16, RoundingMode.HALF_UP)
 
 fun BigDecimal.normalizeCurrencyRate(): BigDecimal =
     this.setScale(

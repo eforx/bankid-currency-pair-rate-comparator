@@ -22,7 +22,13 @@ class DefaultCurrencyExchangeProviderRegistry(
 ) : CurrencyExchangeProviderRegistry {
     val exchangeProviders: Map<CurrencyExchangeProviderId, CurrencyExchangeProviderService> =
         exchangeProviders
-            .associateBy { it.identifier() }
+            .groupBy { it.identifier() }
+            .mapValues { (k, v) ->
+                if (v.size > 1) {
+                    throw IllegalArgumentException("Duplicate currency exchange providers found. provider=$k}")
+                }
+                v.first()
+            }
 
     override fun getProviderService(provider: CurrencyExchangeProviderId): CurrencyExchangeProviderService {
         return exchangeProviders[provider]

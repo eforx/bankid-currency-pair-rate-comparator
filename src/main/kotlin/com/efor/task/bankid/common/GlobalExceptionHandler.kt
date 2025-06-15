@@ -1,4 +1,4 @@
-package com.efor.task.bankid.controller
+package com.efor.task.bankid.common
 
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus

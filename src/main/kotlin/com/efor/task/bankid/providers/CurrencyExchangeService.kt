@@ -123,7 +123,7 @@ class DefaultCurrencyExchangeService(
         }
 
         if (sourceCurrency == destCurrency) {
-            throw IllegalArgumentException("Cannot compare same currencies. currency='$sourceCurrency'")
+            throw IllegalArgumentException("Cannot compare exchange rate for the same currency. currency='$sourceCurrency'")
         }
 
         val sourceProviderService = currencyExchangeProviderRegistry.getProviderService(sourceProvider)

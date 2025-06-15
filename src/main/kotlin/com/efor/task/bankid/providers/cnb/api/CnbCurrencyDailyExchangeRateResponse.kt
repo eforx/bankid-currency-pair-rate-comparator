@@ -11,10 +11,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import java.math.BigDecimal
 
-typealias CnbCurrencyDailyExchangeRateResponse = ExchangeRates
-
+/**
+ * Generated
+ */
 @JacksonXmlRootElement(localName = "kurzy")
-data class ExchangeRates(
+data class CnbCurrencyDailyExchangeRateResponse(
     @JacksonXmlProperty(isAttribute = true, localName = "banka")
     val bank: String,
     @JacksonXmlProperty(isAttribute = true, localName = "datum")
