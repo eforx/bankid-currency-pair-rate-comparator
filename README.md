@@ -12,6 +12,7 @@ A Spring Boot application that provides API endpoints for comparing currency exc
 - Logs HTTP requests and responses for better observability using Logbook
 - Implements caching using Caffeine to optimize performance
 - Provides health monitoring and metrics via Spring Boot Actuator endpoints (/actuator/health)
+- Secures API endpoints with HTTP Basic Authentication
 
 ## Tech Stack
 
@@ -44,6 +45,8 @@ Swagger UI is available at: `http://localhost:8080/swagger-ui.html`
 
 API documentation in OpenAPI format: `http://localhost:8080/v3/api-docs`
 
+Note: The Swagger UI and OpenAPI documentation are publicly accessible without authentication.
+
 ## API Endpoints
 
 ### Get Available Currency Pairs
@@ -51,7 +54,7 @@ API documentation in OpenAPI format: `http://localhost:8080/v3/api-docs`
 Returns all available currency pairs between CNB and the specified provider.
 
 ```bash
-curl -X GET "http://localhost:8080/api/currency/pairs?currencyExchangeProviderId=CURRENCY_API" -H "accept: application/json"
+curl -X GET "http://localhost:8080/api/currency/pairs?currencyExchangeProviderId=CURRENCY_API" -H "accept: application/json" -u user:1234
 ```
 
 Example Response:
@@ -75,7 +78,7 @@ Example Response:
 Calculates the difference in exchange rates between CNB and the specified provider for a given currency pair.
 
 ```bash
-curl -X GET "http://localhost:8080/api/currency/exchange-rate-diff?currencyExchangeProviderId=CURRENCY_API&sourceCurrency=USD&destCurrency=EUR" -H "accept: application/json"
+curl -X GET "http://localhost:8080/api/currency/exchange-rate-diff?currencyExchangeProviderId=CURRENCY_API&sourceCurrency=USD&destCurrency=EUR" -H "accept: application/json" -u user:1234
 ```
 
 Example Response:
@@ -185,6 +188,24 @@ spring:
 
 The above configuration creates two caches with a maximum size of 500 entries each, and entries expire after 10 minutes.
 
+### Security Configuration
+
+The application secures API endpoints using HTTP Basic Authentication. Public endpoints like Swagger UI, OpenAPI documentation, and health checks are accessible without authentication.
+
+#### Default Credentials
+
+Default user credentials are configured in the application-local.yml file:
+
+```yaml
+spring:
+  security:
+    user:
+      name: user
+      password: 1234
+```
+
+For production environments, you should change these default credentials.
+
 ### Example Configuration YAML
 
 Below is an example of a complete configuration file:
@@ -223,6 +244,8 @@ The health endpoint provides information about the application's health status, 
 ```bash
 curl -X GET "http://localhost:8080/actuator/health" -H "accept: application/json"
 ```
+
+Note: The health endpoint is publicly accessible without authentication.
 
 Example Response:
 ```json
