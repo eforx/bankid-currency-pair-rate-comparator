@@ -39,6 +39,14 @@ By default, the application will start with the default profile. To use a specif
 ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
 
+The `local` Spring profile comes with predefined settings.
+
+#### Default credentials for basic authentication
+```
+username: user
+password: 1234
+```
+
 ## API Documentation
 
 Swagger UI is available at: `http://localhost:8080/swagger-ui.html`
@@ -78,13 +86,13 @@ Example Response:
 Calculates the difference in exchange rates between CNB and the specified provider for a given currency pair.
 
 ```bash
-curl -X GET "http://localhost:8080/api/currency/exchange-rate-diff?currencyExchangeProviderId=CURRENCY_API&sourceCurrency=USD&destCurrency=EUR" -H "accept: application/json" -u user:1234
+curl -X GET "http://localhost:8080/api/currency/exchange-rate-diff?currencyExchangeProviderId=CURRENCY_API&sourceCurrency=CZK&destCurrency=EUR" -H "accept: application/json" -u user:1234
 ```
 
 Example Response:
 ```json
 {
-  "exchangeRateDiff": 0.0123
+  "exchangeRateDiff": "-0.000013"
 }
 ```
 
@@ -120,7 +128,10 @@ Logbook is configured in the application's logback.xml file. Here's an example c
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
     </root>
-    <logger name="org.zalando.logbook" level="TRACE" />
+
+    <logger name="org.zalando.logbook" level="TRACE" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
 </configuration>
 ```
 
@@ -128,18 +139,23 @@ In your application.yml, you can further customize Logbook behavior:
 
 ```yaml
 logbook:
-  format.style: http
+  format:
+    style: http
+  exclude:
+    - /actuator/**
+  filter:
+    enabled: true
   obfuscate:
     headers:
       - Authorization
       - X-Secret
   write:
-    category: http.wire-log
     level: INFO
-  include:
-    - /api/**
-  exclude:
-    - /actuator/**
+  predicate:
+    exclude:
+      - path: "/v3/api-docs"
+      - path: "/v3/api-docs/**"
+      - path: "/swagger-ui/**"
 ```
 
 ### External Service Configuration
